@@ -353,13 +353,15 @@
       return `<div class="voice" data-v="${i}"><button class="vplay" type="button" aria-label="${T("Play", "تشغيل")} ${esc(v.name)}"><img src="${esc(b.logo || `${R}assets/people/${v.img}`)}" alt=""><span class="vicon" aria-hidden="true"></span></button>
         <div class="vbody"><div class="vname"><b>${esc(v.name)}</b>${b.subs ? `<span>${fmt(b.subs)} ${SUBS}</span>` : ""}</div>
         <div class="vrow" dir="ltr"><div class="vwave" data-src="${esc(src)}" role="slider" aria-label="${T("Seek", "تقديم")}" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="vw base"></div><div class="vw fill"></div><span class="vknob"></span></div>
-        <span class="vtime">0:00</span></div></div><audio preload="metadata" src="${esc(src)}"></audio></div>`; }).join("");
+        <span class="vtime">0:00</span></div></div><audio preload="none" src="${esc(src)}"></audio></div>`; }).join("");
     if ("loop" in el.dataset) loop(el, vhtml, 18); else el.innerHTML = vhtml;
     $$(".voice", el).forEach((card) => {
       const a = $("audio", card), wave = $(".vwave", card), time = $(".vtime", card);
+      const vd = vs[+card.dataset.v] || {};
       let dur = 0, raf = 0;
       const total = () => (isFinite(a.duration) && a.duration > 0 ? a.duration : dur);
-      peaks(wave.dataset.src).then((w) => {
+      // the wave + length are stored in data.js, so nothing is downloaded until someone presses play
+      (vd.wave ? Promise.resolve({ bars: vd.wave.map((x) => x / 100), dur: vd.dur || 0 }) : peaks(wave.dataset.src)).then((w) => {
         const bars = w.bars.map((h) => `<i style="height:${Math.round(h * 100)}%"></i>`).join("");
         $$(".vw", wave).forEach((x) => x.innerHTML = bars);
         if (w.dur) dur = w.dur;
@@ -378,7 +380,13 @@
       a.addEventListener("ended", () => { a.currentTime = 0; paint(); });
       // click or drag on the wave = jump there and play from that point
       const at = (x) => { const r = wave.getBoundingClientRect(); return Math.max(0, Math.min(1, (x - r.left) / r.width)); };
-      const jump = (f) => { const T0 = total(); if (!T0) return; a.currentTime = f * T0; paint(); };
+      // before the file has loaded, remember where to start and apply it once it's ready
+      let pending = null;
+      const jump = (f) => { const T0 = total(); if (!T0) return;
+        if (a.readyState < 1) { const first = pending === null; pending = f; wave.style.setProperty("--p", f * 100 + "%");
+          if (first) { a.addEventListener("loadedmetadata", () => { a.currentTime = pending * total(); pending = null; paint(); }, { once: true }); a.preload = "auto"; a.load(); }
+          return; }
+        a.currentTime = f * T0; paint(); };
       let drag = false;
       wave.addEventListener("pointerdown", (e) => { drag = true; wave.setPointerCapture(e.pointerId); jump(at(e.clientX)); });
       wave.addEventListener("pointermove", (e) => { if (drag) jump(at(e.clientX)); });

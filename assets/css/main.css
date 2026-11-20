@@ -376,7 +376,7 @@ a.brandcard:hover img, a.brandcard:hover i { transform: translateY(-3px); box-sh
 .logo-row .mq-view { padding-inline: 34px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
 .logo-row .mq-set { gap: 24px; padding-inline-end: 24px; }
 .logo { position: relative; display: block; flex: none; width: 62px; height: 62px; border-radius: 50%; overflow: hidden; isolation: isolate; transition: transform .25s; background: var(--deep); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent); }
-.logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; filter: saturate(.55) brightness(.9); opacity: .82; transition: filter .3s, opacity .3s; }
+.logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; transition: filter .3s; }
 /* hover: a soft band of light sweeps across inside the logo (no outer glow) */
 .logo::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 48%, rgba(255,255,255,.12) 56%, transparent 70%); background-size: 260% 100%; background-position: 130% 0; opacity: 0; }
 .logo i { display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: var(--deep); color: var(--violet); font-style: normal; font-weight: 800; font-size: .9rem; opacity: .82; }
@@ -384,6 +384,18 @@ a.brandcard:hover img, a.brandcard:hover i { transform: translateY(-3px); box-sh
 .logo:hover img { opacity: 1; filter: none; }
 .logo:hover::after { opacity: 1; animation: sweep .8s ease-out forwards; }
 @keyframes sweep { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+/* hover card beside a client logo: who they are + what was made for them */
+.lg-tip { position: fixed; z-index: 60; top: 0; left: 0; width: max-content; max-width: 240px; padding: 11px 14px 12px; border-radius: 14px; pointer-events: none;
+  background: color-mix(in srgb, var(--deep) 88%, #000); border: 1px solid color-mix(in srgb, var(--violet) 30%, transparent);
+  box-shadow: 0 14px 34px rgba(0,0,0,.45); color: var(--ink); font-size: .8rem; line-height: 1.45;
+  opacity: 0; transform: translateX(var(--from, -6px)); transition: opacity .18s, transform .18s; }
+.lg-tip.on { opacity: 1; transform: none; }
+.lg-tip b { display: block; font-size: .9rem; margin-bottom: 2px; }
+.lg-tip .lt-sub { color: var(--muted); display: block; }
+.lg-tip .lt-made { display: block; margin-top: 6px; color: var(--violet); font-weight: 600; }
+.lg-tip .lt-cats { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.lg-tip .lt-cats span { padding: 2px 8px; border-radius: 99px; font-size: .7rem; background: color-mix(in srgb, var(--violet) 16%, transparent); color: var(--ink); }
+@media (hover: none) { .lg-tip { display: none; } }
 
 .quotes.mq { columns: auto; }
 .mq .quote { width: min(360px, 78vw); flex: none; margin: 0; white-space: normal; }

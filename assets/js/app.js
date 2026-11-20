@@ -220,8 +220,40 @@
   };
 
   $$("[data-logos]").forEach((el) => {
-    const html = ordered(el.dataset.logos).map((k) => { const b = brand(k); return `<a class="logo" href="${b.link || "#"}" ${b.link ? 'target="_blank" rel="noopener"' : ""} title="${esc(b.name)}" aria-label="${esc(b.name)}">${b.logo ? `<img src="${esc(b.logo)}" alt="${esc(b.name)}">` : `<i>${esc(initials(b.name))}</i>`}</a>`; }).join("");
+    const html = ordered(el.dataset.logos).map((k) => { const b = brand(k); return `<a class="logo" data-k="${k}" href="${b.link || "#"}" ${b.link ? 'target="_blank" rel="noopener"' : ""} title="${esc(b.name)}" aria-label="${esc(b.name)}">${b.logo ? `<img src="${esc(b.logo)}" alt="${esc(b.name)}">` : `<i>${esc(initials(b.name))}</i>`}</a>`; }).join("");
     if (el.classList.contains("logo-row")) loop(el, html, 26); else el.innerHTML = html;
+  });
+
+  // hover card on client logos: a short summary built from the data (audience, videos made, views, categories)
+  const logoTip = (() => {
+    const tip = document.createElement("div"); tip.className = "lg-tip"; tip.setAttribute("role", "tooltip"); document.body.append(tip);
+    const where = (link) => { const h = (link || "").replace(/^https?:\/\/(www\.)?/, "").split("/")[0];
+      return /youtube/.test(h) ? "YouTube" : /tiktok/.test(h) ? "TikTok" : /instagram/.test(h) ? "Instagram" : /facebook/.test(h) ? "Facebook" : /^x\.com|twitter/.test(h) ? "X" : ""; };
+    const card = (k) => { const b = brand(k), vs = D.videos.filter((v) => v.c === k), views = vs.reduce((s, v) => s + (v.v || 0), 0);
+      const cats = [...new Set(vs.flatMap((v) => v.cats))].filter((c) => CAT[c]).map((c) => CAT[c].nav || CAT[c].title);
+      const p = where(b.link);
+      const sub = b.subs ? T(`${fmt(b.subs)} followers${p ? " on " + p : ""}`, `${fmt(b.subs)} متابع${p ? " على " + p : ""}`) : p ? T(`On ${p}`, `على ${p}`) : "";
+      const n = vs.length, made = n ? T(`${n} video${n > 1 ? "s" : ""} edited`, n === 1 ? "فيديو واحد من مونتاجي" : n === 2 ? "فيديوهين من مونتاجي" : `${n} فيديوهات من مونتاجي`) + (views ? T(` · ${fmt(views)} views`, ` · ${fmt(views)} مشاهدة`) : "") : "";
+      return `<b>${esc(b.name)}</b>${sub ? `<span class="lt-sub">${esc(sub)}</span>` : ""}${made ? `<span class="lt-made">${esc(made)}</span>` : ""}${cats.length ? `<span class="lt-cats">${cats.map((c) => `<span>${esc(c)}</span>`).join("")}</span>` : ""}`; };
+    let cur = null;
+    const show = (a) => { if (cur === a) return; cur = a; tip.innerHTML = card(a.dataset.k);
+      const r = a.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, gap = 12;
+      const fitsEnd = AR ? r.left - gap - w > 8 : r.right + gap + w < innerWidth - 8;
+      const right = AR ? !fitsEnd : fitsEnd;   // prefer the reading direction's far side, flip if there is no room
+      tip.style.left = (right ? r.right + gap : r.left - gap - w) + "px";
+      tip.style.top = Math.max(8, Math.min(innerHeight - h - 8, r.top + r.height / 2 - h / 2)) + "px";
+      tip.style.setProperty("--from", right ? "-6px" : "6px");
+      tip.classList.add("on"); };
+    const hide = () => { cur = null; tip.classList.remove("on"); };
+    addEventListener("scroll", hide, { passive: true });
+    return { show, hide };
+  })();
+  $$("[data-logos]").forEach((el) => {
+    $$(".logo", el).forEach((a) => a.removeAttribute("title"));
+    el.addEventListener("mouseover", (e) => { const a = e.target.closest(".logo"); if (a) logoTip.show(a); });
+    el.addEventListener("mouseout", (e) => { const a = e.target.closest(".logo"); if (a && !a.contains(e.relatedTarget)) logoTip.hide(); });
+    el.addEventListener("focusin", (e) => { const a = e.target.closest(".logo"); if (a) logoTip.show(a); });
+    el.addEventListener("focusout", logoTip.hide);
   });
 
   // hero: each editing tool sits in the empty space around the photo and drifts on its own small, invisible

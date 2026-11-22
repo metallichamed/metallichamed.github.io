@@ -80,7 +80,7 @@ window.MH = {
   clientViews: {
     itp: 35.8e6, cod: 43.78e6, awe: 33e6, ps: 7.5e3, ubisoft: 5.23e6, fortnite: 2e6, ea: 547e3, arena: 163e3, nvidia: 42e3, tundra: 42e3, ultimates: 29e3,
     ooredoo: 26.5e3, predator: 22e3, mazaj: 2.79e6, amados: 2e3, ggg: 1e3, frenzy: 1e3, pubg: 1e3,
-    aziz: 24.7e6, leonohero: 19e6, aboflah: 15.1e6, cancel: 8e6, offside: 8e6, b3shr: 4.8e6, amrelhady: 4.6e6, golazo: 2.1e6,
+    aziz: 24.7e6, leonohero: 24.24e6, aboflah: 15.1e6, cancel: 8e6, offside: 8e6, b3shr: 4.8e6, amrelhady: 4.6e6, golazo: 2.1e6,
     ahmedshow: 633e3, colby: 533e3, i6arba5: 274e3, sofyan: 216e3, gamersreact: 127e3, reeng: 3.3e3
   },
 

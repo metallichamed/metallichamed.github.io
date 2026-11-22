@@ -82,9 +82,11 @@ window.MH = {
     ooredoo: 26.5e3, predator: 22e3, mazaj: 2.79e6, amados: 2e3, ggg: 1e3, frenzy: 1e3, pubg: 1e3,
     aziz: 24.7e6, leonohero: 24.24e6, aboflah: 15.1e6, cancel: 8e6, offside: 8e6, b3shr: 4.8e6, amrelhady: 4.6e6, golazo: 2.1e6,
     ahmedshow: 633e3, colby: 533e3, i6arba5: 274e3, sofyan: 216e3, gamersreact: 127e3, reeng: 3.3e3,
-    /* not in Views.txt: sum of the videos already on this site (YouTube / TikTok counts, 2026-11-22).
-       JellyPeanut left out (38 views, unlisted upload); Instagram, Facebook and Drive-hosted videos have no public count. */
-    mjrm: 1.59e6, tega: 445.4e3, kingsmen: 442.4e3, bidw: 317.8e3, roc: 27.9e3, spartan: 8.1e3, etalks: 1.7e3
+    /* not in Views.txt: sum of the videos already on this site (YouTube / TikTok / Instagram / Facebook counts, 2026-11-22).
+       JellyPeanut left out (38 views, unlisted upload); Drive-hosted videos have no public count.
+       Sheikh = his 4 IG reels (IG + cross-posted FB plays); Claritin = both FB reels (986 + 659); Endless = 1 IG reel. */
+    mjrm: 1.59e6, tega: 445.4e3, kingsmen: 442.4e3, bidw: 317.8e3, roc: 27.9e3, spartan: 8.1e3, etalks: 1.7e3,
+    sheikh: 2.9e6, claritin: 1.6e3, endless: 1.9e3
   },
 
   /* brand key: [display name, logo file in assets/logos (or ""), link, subscribers/followers] */

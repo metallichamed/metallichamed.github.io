@@ -14,6 +14,7 @@
   const brand = (k) => { const b = D.brands[k] || [k, "", ""]; return { key: k, name: b[0], logo: b[1] ? `${R}assets/logos/${b[1]}` : "", link: b[2], subs: b[3] }; };
   const initials = (n) => n.replace(/[^A-Za-z0-9؀-ۿ ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
   const catUrl = (k) => `${H}${k}/`;
+  const CV = D.clientViews || {};
   const CAT = Object.fromEntries(D.categories.map((c) => [c.key, c]));
   const inCat = (k) => D.videos.filter((v) => v.cats.includes(k));
   const byViews = (a, b) => (b.v || 0) - (a.v || 0);
@@ -229,12 +230,15 @@
     const tip = document.createElement("div"); tip.className = "lg-tip"; tip.setAttribute("role", "tooltip"); document.body.append(tip);
     const where = (link) => { const h = (link || "").replace(/^https?:\/\/(www\.)?/, "").split("/")[0];
       return /youtube/.test(h) ? "YouTube" : /tiktok/.test(h) ? "TikTok" : /instagram/.test(h) ? "Instagram" : /facebook/.test(h) ? "Facebook" : /^x\.com|twitter/.test(h) ? "X" : ""; };
-    const card = (k) => { const b = brand(k), vs = D.videos.filter((v) => v.c === k), views = vs.reduce((s, v) => s + (v.v || 0), 0);
+    const card = (k) => { const b = brand(k), vs = D.videos.filter((v) => v.c === k), views = CV[k];
       const cats = [...new Set(vs.flatMap((v) => v.cats))].filter((c) => CAT[c]).map((c) => CAT[c].nav || CAT[c].title);
       const p = where(b.link);
       const sub = b.subs ? T(`${fmt(b.subs)} followers${p ? " on " + p : ""}`, `${fmt(b.subs)} متابع${p ? " على " + p : ""}`) : p ? T(`On ${p}`, `على ${p}`) : "";
-      const n = vs.length, made = n ? T(`${n} video${n > 1 ? "s" : ""} edited`, n === 1 ? "فيديو واحد من مونتاجي" : n === 2 ? "فيديوهين من مونتاجي" : `${n} فيديوهات من مونتاجي`) + (views ? T(` · ${fmt(views)} views`, ` · ${fmt(views)} مشاهدة`) : "") : "";
-      return `<b>${esc(b.name)}</b>${sub ? `<span class="lt-sub">${esc(sub)}</span>` : ""}${made ? `<span class="lt-made">${esc(made)}</span>` : ""}${cats.length ? `<span class="lt-cats">${cats.map((c) => `<span>${esc(c)}</span>`).join("")}</span>` : ""}`; };
+      const n = vs.length, made = [
+        CV[k] ? T(`${fmt(views)} views on my edits`, `${fmt(views)} مشاهدة على مونتاجي`) : "",
+        n ? T(`${n} video${n > 1 ? "s" : ""} on this site`, n === 1 ? "فيديو واحد على الموقع" : n === 2 ? "فيديوهين على الموقع" : `${n} فيديوهات على الموقع`) : ""
+      ].filter(Boolean).join("<br>");
+      return `<b>${esc(b.name)}</b>${sub ? `<span class="lt-sub">${esc(sub)}</span>` : ""}${made ? `<span class="lt-made">${made}</span>` : ""}${cats.length ? `<span class="lt-cats">${cats.map((c) => `<span>${esc(c)}</span>`).join("")}</span>` : ""}`; };
     let cur = null;
     const show = (a) => { if (cur === a) return; cur = a; tip.innerHTML = card(a.dataset.k);
       const r = a.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, gap = 12;
@@ -444,7 +448,7 @@
     const tile = (k, i) => { const b = brand(k), big = i < 2;
       const pic = b.logo ? `<img class="ct-logo" src="${esc(b.logo)}" alt="" loading="lazy">` : `<i class="ct-logo">${esc(initials(b.name))}</i>`;
       const inner = `${b.logo ? `<img class="ct-bg" src="${esc(b.logo)}" alt="" aria-hidden="true" loading="lazy">` : ""}<span class="ct-n" dir="ltr">${String(i + 1).padStart(2, "0")}</span>${pic}
-        <span class="ct-txt"><b>${esc(b.name)}</b>${b.subs ? `<span>${audience(b)}</span>` : ""}</span>`;
+        <span class="ct-txt"><b>${esc(b.name)}</b>${b.subs ? `<span>${audience(b)}</span>` : ""}${CV[k] ? `<em class="ct-v" title="${T("Views on the videos I edited for them", "مشاهدات الفيديوهات اللي عملتها لهم")}">▶ ${T(`${fmt(CV[k])} views`, `${fmt(CV[k])} مشاهدة`)}</em>` : ""}</span>`;
       const attrs = `class="ctile${big ? " big" : ""}" style="--i:${i}"`;
       return b.link ? `<a ${attrs} href="${esc(b.link)}" target="_blank" rel="noopener" aria-label="${esc(b.name)}">${inner}</a>` : `<div ${attrs}>${inner}</div>`; };
     el.innerHTML = `<div class="ct-bar"><div class="seg" role="group" aria-label="${T("Sort clients", "ترتيب العملاء")}"><button type="button" data-view="popular" class="on" aria-pressed="true">${T("Popular", "الأشهر")}</button><button type="button" data-view="followers" aria-pressed="false">${T("Most followers", "الأكثر متابعين")}</button></div>

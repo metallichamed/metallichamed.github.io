@@ -472,6 +472,8 @@ i.ct-logo { display: grid; place-items: center; background: var(--deep); color: 
 .ctile.big .ct-txt b { font-family: var(--f-display); font-size: clamp(1.1rem, 2vw, 1.5rem); }
 .ct-txt span { font-size: .74rem; color: var(--violet); }
 .ctile.big .ct-txt span { font-size: .9rem; }
+.ct-txt .ct-v { font-style: normal; font-size: .72rem; font-weight: 600; color: var(--ink); opacity: .85; }
+.ctile.big .ct-txt .ct-v { font-size: .86rem; }
 .ct-n { position: absolute; top: 12px; inset-inline-start: 14px; font-size: .7rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .06em; }
 a.ctile:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--violet) 55%, var(--line)); }
 a.ctile:hover .ct-bg { opacity: .5; }

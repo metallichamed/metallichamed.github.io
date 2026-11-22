@@ -73,6 +73,15 @@ window.MH = {
     }
   },
 
+  /* Total views on the videos Hamed edited for each client (his own tally, Drive "Website Data/Views.txt").
+     Several platforms are summed (AWE yt 3M + fb 30M, Amr El Hady yt 4M + fb 600K, Ooredoo IG 11.5K + FB 15K). */
+  clientViews: {
+    cod: 43.78e6, awe: 33e6, ubisoft: 5.23e6, fortnite: 2e6, ea: 547e3, arena: 163e3, nvidia: 42e3, tundra: 42e3, ultimates: 29e3,
+    ooredoo: 26.5e3, predator: 22e3, mazaj: 10e3, amados: 2e3, ggg: 1e3, frenzy: 1e3, pubg: 1e3,
+    aziz: 24.7e6, leonohero: 19e6, aboflah: 15.1e6, cancel: 8e6, offside: 8e6, b3shr: 4.8e6, amrelhady: 4.6e6, golazo: 2.1e6,
+    ahmedshow: 633e3, colby: 533e3, i6arba5: 274e3, sofyan: 216e3, gamersreact: 127e3, reeng: 3.3e3
+  },
+
   /* brand key: [display name, logo file in assets/logos (or ""), link, subscribers/followers] */
   brands: {
     cod:      ["Call of Duty Arabic", "4-BFZa7lVo.webp", "https://www.tiktok.com/@callofdutyarabic", 599.5e3],

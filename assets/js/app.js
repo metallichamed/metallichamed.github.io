@@ -9,7 +9,7 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const fmt = (n) => !n ? "" : n >= 1e6 ? (n / 1e6).toFixed(n >= 1e8 ? 0 : n >= 1e7 ? 1 : 2).replace(/0$/, "").replace(/\.0$/, "") + "M" : n >= 1e3 ? Math.round(n / 1e3) + "K" : String(n);
+  const fmt = (n) => !n ? "" : n >= 1e6 ? String(+(n / 1e6).toFixed(n >= 1e8 ? 0 : n >= 1e7 ? 1 : 2)) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "K" : String(n);
   const wa = (m) => `https://wa.me/${P.whatsapp}?text=${encodeURIComponent(m || T("Hi Hamed, I saw your portfolio and I'd like to talk about a video project.", "أهلاً حامد، شفت البورتفوليو بتاعك وعايز أتكلم معاك في مشروع فيديو."))}`;
   const brand = (k) => { const b = D.brands[k] || [k, "", ""]; return { key: k, name: b[0], logo: b[1] ? `${R}assets/logos/${b[1]}` : "", link: b[2], subs: b[3] }; };
   const initials = (n) => n.replace(/[^A-Za-z0-9؀-ۿ ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
